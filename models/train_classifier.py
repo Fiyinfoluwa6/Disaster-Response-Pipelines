@@ -38,7 +38,7 @@ def load_data(database_filepath):
     Y = df.iloc[:, 4:].values
     category_names = list(df.columns[4:])
     return X, Y, category_names
-    ##pass
+  
 
 
 def tokenize(text):
@@ -76,19 +76,19 @@ def build_model():
              }
     cv = GridSearchCV(pipeline,param_grid=parameters)
     return cv
-    ##pass
+  
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
-    Y_pred = model.predict(X_test)
-    for i in range(Y_test.shape[1]):
-        print('{} accuracy {}'.format(category_names[i],accuracy_score(Y_test[:,i],Y_pred[:,i])))
-    ##pass
+    y_pred = model.predict(X_test)
+    for idx,val in enumerate(category_names):
+        print("Category:", val,"\n", classification_report(Y_test[:, idx], y_pred[:,idx]))
+ 
 
 
 def save_model(model, model_filepath):
     joblib.dump(model, model_filepath)
-    #pass
+  
 
 
 def main():

@@ -2,7 +2,12 @@ import sys
 import pandas as pd
 import numpy as np
 from sqlalchemy import create_engine
-"""
+
+
+
+
+def load_data(messages_filepath, categories_filepath):
+    """
 Load the Dataset
 Merge the dataset to a new dataframe
 
@@ -12,14 +17,15 @@ Args:
  Returns:
        New merged dataframe
 """
-
-def load_data(messages_filepath, categories_filepath):
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     df = pd.merge(messages, categories, how='outer',on=['id'])
     return df
     ##pass
-"""
+    
+
+def clean_data(df):
+    """
 Preprocessing stage
 
 Args:
@@ -29,8 +35,6 @@ Returns:
   cleaned dataframe
 
 """
-
-def clean_data(df):
     categories = df.categories.str.split(';', expand = True)
     row = categories.loc[0]
     category_colnames = row.apply(lambda x: x[:-2]).values.tolist()
@@ -46,14 +50,14 @@ def clean_data(df):
    # pass
 
     
-"""
+def save_data(df, database_filepath):
+    """
 Args:
         df: Cleaned dataframe.
         database_filepath: path to save dataframe
 """
-def save_data(df, database_filepath):
     engine = create_engine('sqlite:///' + database_filepath)
-    df.to_sql('df', engine, index=False)
+    df.to_sql('df', engine,if_exists='replace', index=False)
     ##return df  
 
 def main():
